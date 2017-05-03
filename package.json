@@ -16,7 +16,7 @@
     "climate-si7020":"",
     "tessel":"",
     "servo-pca9685":""
-
+  
   },
   "license": "MIT",
   "readme": "A bare bones Tessel 2 blinky script."

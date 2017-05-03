@@ -17,14 +17,10 @@ var servo = servolib.use(tessel.port['B']);
 // var port = 8888;
 var port = 8000;
 
-var av = require('tessel-av');
-// var camera = new av.Camera();
-var camera = new av.Camera({
-  dimensions: "160x120",
-  fps: 30
-});
+
 
 // climate 
+
 climate.on('ready', function () {
   console.log('Connected to climate module');
 
@@ -38,6 +34,7 @@ climate.on('ready', function () {
     });
   });
 });
+
 
 climate.on('error', function(err) {
   console.log('error connecting module', err);
@@ -76,14 +73,13 @@ server.listen(port, function () {
 });
 
 app.use(express.static(path.join(__dirname, '/public')));
-app.get('/stream', (request, response) => {
-  response.redirect(camera.url);
-});
+
 
 // ==== socket io ====
 
-io.on('connection', function(socket){
+io.sockets.on('connection', function(socket){
   socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+  	console.log(msg);
+    io.sockets.emit('chat message', msg);
   });
 });
