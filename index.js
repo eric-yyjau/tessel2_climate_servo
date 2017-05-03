@@ -82,34 +82,8 @@ app.get('/stream', (request, response) => {
 
 // ==== socket io ====
 
-io.sockets.on('connection', function(socket) {
-	socket.on('new user', function(data){
-		console.log(data);
-		if (nicknames.indexOf(data) != -1) {
-
-		} else {
-			socket.emit('chat', 'SERVER', '歡迎光臨 ' + data);
-
-			socket.nickname = data;
-			nicknames.push(socket.nickname);
-			io.sockets.emit('usernames', nicknames);
-			updateNicknames();
-		}
-	});
-
-	function updateNicknames(){
-		io.sockets.emit('usernames', nicknames);
-	}
-
-	//
-	socket.on('send message', function(data){
-		io.sockets.emit('new message', { msg: data, nick: socket.nickname });
-	});
-
-	socket.on('disconnect', function(data){
-		if (!socket.nickname) return;
-		io.sockets.emit('chat', 'SERVER', socket.nickname + ' 離開了聊天室～');
-		nicknames.splice(nicknames.indexOf(socket.nickname), 1);
-		updateNicknames();
-	});
+io.on('connection', function(socket){
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg);
+  });
 });
