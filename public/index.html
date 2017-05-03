@@ -1,40 +1,56 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-      #messages { margin-bottom: 40px }
-    </style>
+    <title>Enviroment monitor</title>
   </head>
   <body>
     <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
+    <h1> Tempearture: </h1>
+    <p id="temp">This is temperature(F).</p>
+    <h1> Humidity (%): </h1>
+    <p id="humid">This is relative humid.</p>
+    <h1> Fan level: </h1>
+    <p id="fan">0 </p>
+    <button id="message">Update</button>
+    <form id="form1">
+      <input id="m2" autocomplete="off" /><button>Auto-update interval</button>
     </form>
     <!-- <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script> -->
     <!-- <script src="https://code.jquery.com/jquery-1.11.1.js"></script> -->
     <script type="text/javascript" src="//code.jquery.com/jquery-latest.min.js"></script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script>
+    <script type="text/javascript">    
       $(function () {
         // var socket = io();
         var socket = io.connect();
-        $('form').submit(function(){
-          socket.emit('chat message', $('#m').val());
-          $('#m').val('');
+        var $btn1  = $('#message');
+        var $form1 = $('#form1');
+
+        $btn1.click(function(e){
+        // $('form').submit(function(){
+          // socket.emit('chat message', $('#m').val());
+          socket.emit('update info', '');
+          // $('#m').val('');
           return false;
         });
+
+        $form1.submit(function(e){
+          e.preventDefault();
+          socket.emit('update interval', $('#m').val());
+        });
+
         socket.on('chat message', function(msg){
-          $('#messages').append($('<li>').text(msg));
+          // $('#messages').append($('<li>').text(msg));
           window.scrollTo(0, document.body.scrollHeight);
+        });
+        socket.on('update info', function(msg){
+          console.log(msg);
+          $("#temp").text(msg.temp);
+          $("#humid").text(msg.humid);
+        });
+        socket.on('update fan', function(msg){
+          console.log(msg);
+          $("#fan").text(msg.fan);
         });
       });
     </script>
