@@ -1,0 +1,15 @@
+{
+  "name": "tessel2_climate_servo",
+  "version": "0.0.0",
+  "description": "work on Tessel 2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "git://github.com/eric-yyjau/tessel2_climate_servo.git",
+  "keywords": [
+    "Tessel"
+  ],
+  "license": "MIT",
+  "readme": "A bare bones Tessel 2 blinky script."
+}
